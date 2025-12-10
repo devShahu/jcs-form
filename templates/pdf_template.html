@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="utf-8" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Noto Sans Bengali", sans-serif;
+            font-size: 10pt;
+            line-height: 1.3;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .pdf-page {
+            width: 100%;
+            background: white;
+            padding: 15px 25px;
+            page-break-after: always;
+            page-break-inside: avoid;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        .pdf-page:last-child {
+            page-break-after: auto;
+        }
+        
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            
+            .pdf-page {
+                page-break-after: always;
+                page-break-inside: avoid;
+            }
+        }
+        
+        /* Top motto */
+        .top-motto {
+            display: table;
+            width: 100%;
+            font-size: 10pt;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .motto-cell {
+            display: table-cell;
+            width: 33.33%;
+        }
+        
+        .motto-left { text-align: left; }
+        .motto-center { text-align: center; }
+        .motto-right { text-align: right; }
+        
+        /* Header with logo, title, photo */
+        .header-row {
+            display: table;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .header-cell {
+            display: table-cell;
+            vertical-align: top;
+        }
+        
+        .header-left {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .header-center {
+            text-align: center;
+            padding-top: 5px;
+        }
+        
+        .header-right {
+            width: 154px;
+            text-align: right;
+        }
+        
+        .logo-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+        }
+        
+        .title-main {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #0f6b3f;
+            line-height: 1.1;
+        }
+        
+        .title-sub {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #c9141f;
+            margin-top: 3px;
+        }
+        
+        .photo-box {
+            width: 154px;
+            height: 182px;
+            border: 2px solid #999;
+            background: #fff;
+            text-align: center;
+            font-size: 11pt;
+            padding: 10px;
+            display: inline-block;
+            line-height: 1.3;
+        }
+        
+        .photo-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        /* Form number row */
+        .form-no-row {
+            margin: 15px 0;
+            font-size: 10pt;
+        }
+        
+        .form-no-row label {
+            font-weight: 500;
+        }
+        
+        .form-no-row .note {
+            color: #666;
+            font-size: 9pt;
+            margin-left: 10px;
+        }
+        
+        /* Form fields */
+        .field-row {
+            margin: 10px 0;
+            border-bottom: 1px dotted #9aa4ae;
+            padding-bottom: 3px;
+            min-height: 20px;
+        }
+        
+        .field-row-lg {
+            margin: 10px 0;
+            border-bottom: 1px dotted #9aa4ae;
+            padding-bottom: 5px;
+            min-height: 35px;
+        }
+        
+        .field-label {
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 2px;
+        }
+        
+        .field-value {
+            display: inline;
+            margin-left: 5px;
+        }
+        
+        /* Two column layout */
+        .two-col {
+            display: table;
+            width: 100%;
+            margin: 10px 0;
+        }
+        
+        .col-50 {
+            display: table-cell;
+            width: 48%;
+            padding-right: 2%;
+            vertical-align: top;
+        }
+        
+        /* Section title */
+        .section-title {
+            font-weight: 600;
+            font-size: 12pt;
+            margin: 15px 0 10px 0;
+        }
+        
+        /* Education table */
+        .edu-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        
+        .edu-table th,
+        .edu-table td {
+            border: 1.5px solid #c5ced3;
+            padding: 6px 4px;
+            font-size: 9pt;
+            text-align: left;
+        }
+        
+        .edu-table th {
+            background: #f1f5f7;
+            font-weight: 600;
+        }
+        
+        /* Oath text */
+        .oath-text {
+            font-size: 10pt;
+            line-height: 1.6;
+            text-align: justify;
+            margin: 10px 0;
+        }
+        
+        /* Signature section */
+        .signature-box {
+            width: 200px;
+            margin-top: 20px;
+        }
+        
+        .signature-line {
+            border-bottom: 1px dotted #9aa4ae;
+            height: 30px;
+            margin-bottom: 5px;
+        }
+        
+        .signature-row {
+            display: table;
+            width: 100%;
+            margin-top: 20px;
+        }
+        
+        .signature-col {
+            display: table-cell;
+            width: 33%;
+            text-align: center;
+            font-size: 9pt;
+        }
+        
+        /* Utilities */
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-sm {
+            font-size: 9pt;
+        }
+        
+        .text-gray {
+            color: #666;
+        }
+        
+        .mt-1 { margin-top: 5px; }
+        .mt-2 { margin-top: 10px; }
+        .mt-3 { margin-top: 15px; }
+        .mt-4 { margin-top: 20px; }
+        .mb-1 { margin-bottom: 5px; }
+        .mb-2 { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <!-- ========================= PAGE 1 ========================== -->
+    <div class="pdf-page">
+        <!-- Top motto -->
+        <div class="top-motto">
+            <div class="motto-cell motto-left">শিক্ষা</div>
+            <div class="motto-cell motto-center">ঐক্য</div>
+            <div class="motto-cell motto-right">মুক্তি</div>
+        </div>
+        
+        <!-- Header with logo, title, and photo -->
+        <div class="header-row">
+            <div class="header-cell header-left">
+                <img src="{{logo_path}}" class="logo-img" alt="লোগো" />
+            </div>
+            <div class="header-cell header-center">
+                <h1 class="title-main">জাতীয় ছাত্রশক্তি</h1>
+                <div class="title-sub">সদস্য ফর্ম</div>
+            </div>
+            <div class="header-cell header-right">
+                <div class="photo-box">
+                    {{photo}}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Form number -->
+        <div class="form-no-row">
+            <label>ফরম নং (সংশ্লিষ্ট কমিটি কর্তৃক পূরণকৃত):</label>
+            <span class="field-value">{{form_no}}</span>
+            <span class="note">(থানা/মহানগর/জেলা/কলেজ/বিশ্ববিদ্যালয়)</span>
+        </div>
+        
+        <!-- Personal Information -->
+        <div class="field-row">
+            <span class="field-label">নাম (বাংলায়):</span>
+            <span class="field-value">{{name_bangla}}</span>
+        </div>
+        
+        <div class="field-row">
+            <span class="field-label">নাম (ইংরেজি বড় হাত):</span>
+            <span class="field-value">{{name_english}}</span>
+        </div>
+        
+        <div class="two-col">
+            <div class="col-50">
+                <div class="field-row">
+                    <span class="field-label">পিতার নাম (বাংলা):</span>
+                    <span class="field-value">{{father_name}}</span>
+                </div>
+            </div>
+            <div class="col-50">
+                <div class="field-row">
+                    <span class="field-label">মাতার নাম (বাংলা):</span>
+                    <span class="field-value">{{mother_name}}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="two-col">
+            <div class="col-50">
+                <div class="field-row">
+                    <span class="field-label">মোবাইল নাম্বার:</span>
+                    <span class="field-value">{{mobile_number}}</span>
+                </div>
+            </div>
+            <div class="col-50">
+                <div class="field-row">
+                    <span class="field-label">রক্তের গ্রুপ:</span>
+                    <span class="field-value">{{blood_group}}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="two-col">
+            <div class="col-50">
+                <div class="field-row">
+                    <span class="field-label">এনআইডি / জন্ম নিবন্ধন নাম্বার:</span>
+                    <span class="field-value">{{nid_birth_reg}}</span>
+                </div>
+            </div>
+            <div class="col-50">
+                <div class="field-row">
+                    <span class="field-label">জন্ম তারিখ (দিন-মাস-সাল):</span>
+                    <span class="field-value">{{birth_date}}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="field-row-lg">
+            <span class="field-label">বর্তমান ঠিকানা:</span>
+            <div class="field-value">{{present_address}}</div>
+        </div>
+        
+        <div class="field-row-lg">
+            <span class="field-label">স্থায়ী ঠিকানা:</span>
+            <div class="field-value">{{permanent_address}}</div>
+        </div>
+        
+        <div class="field-row-lg">
+            <span class="field-label">রাজনৈতিক / সাংগঠনিক সম্পৃক্ততা:</span>
+            <div class="field-value">{{political_affiliation}}</div>
+        </div>
+        
+        <div class="field-row-lg">
+            <span class="field-label">সর্বশেষ পদবী (কমিটির নাম সহ; যদি থাকে):</span>
+            <div class="field-value">{{last_position}}</div>
+        </div>
+        
+        <!-- Education Table -->
+        <h3 class="section-title">শিক্ষাগত যোগ্যতার বিবরণ:</h3>
+        <table class="edu-table">
+            <thead>
+                <tr>
+                    <th>Exam / পরীক্ষা</th>
+                    <th>Year / সাল</th>
+                    <th>Board / বোর্ড</th>
+                    <th>বিভাগ / গ্রেড / সনদসংখ্যা</th>
+                    <th>Institution / স্কুল / কলেজ / বিশ্ববিদ্যালয়</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>SSC / দাখিল / O levels</td>
+                    <td>{{ssc_year}}</td>
+                    <td>{{ssc_board}}</td>
+                    <td>{{ssc_group}}</td>
+                    <td>{{ssc_institution}}</td>
+                </tr>
+                <tr>
+                    <td>HSC / আলিম / A levels</td>
+                    <td>{{hsc_year}}</td>
+                    <td>{{hsc_board}}</td>
+                    <td>{{hsc_group}}</td>
+                    <td>{{hsc_institution}}</td>
+                </tr>
+                <tr>
+                    <td>স্নাতক / অনার্স / সমমান</td>
+                    <td>{{graduation_year}}</td>
+                    <td>{{graduation_board}}</td>
+                    <td>{{graduation_subject}}</td>
+                    <td>{{graduation_institution}}</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Movement role -->
+        <div class="field-row-lg mt-2">
+            <span class="field-label">জুলাই–আগস্ট ২০২৪ এ ছাত্র–জনতার গণঅভ্যুত্থানে আপনার ভূমিকা ও সংযুক্তি:</span>
+            <div class="field-value">{{movement_role}}</div>
+        </div>
+        
+        <div class="text-right text-sm text-gray mt-2">
+            অপর পৃষ্ঠায় অব্যাহত
+        </div>
+    </div>
+    
+    <!-- ========================= PAGE 2 ========================== -->
+    <div class="pdf-page">
+        <h2 class="section-title" style="font-size: 13pt;">জাতীয় ছাত্রশক্তির জন্য আপনার চাওয়া এবং আকাঙ্ক্ষা কি?</h2>
+        <div class="field-row-lg" style="min-height: 50px;">
+            <div class="field-value">{{aspirations}}</div>
+        </div>
+        
+        <!-- Oath Section -->
+        <h3 class="section-title mt-3">অঙ্গীকারনামা</h3>
+        <p class="oath-text">
+            আমি, <strong>{{declaration_name}}</strong> এই মর্মে অঙ্গীকার করিতেছি যে,
+            এই ফরমে উল্লেখিত সকল তথ্য সঠিক এবং জুলাই–আগস্ট ২০২৪ এর গণঅভ্যুত্থানের মধ্য থেকে
+            গড়ে উঠা ছাত্র সংগঠন, জাতীয় ছাত্রশক্তিতে যোগদানের মাধ্যমে জুলাই–আগস্ট ২০২৪-এর
+            চেতনাকে সমুন্নত রাখিতে আমি আগ্রহী। আমি ঘোষণা করিতেছি যে, এই ফরম পূরণের মাধ্যমে যদি
+            আমাকে জাতীয় ছাত্রশক্তির সদস্য করা হয় তবে আমি নিজ উদ্যোগে অন্যান্য সকল রাজনৈতিক
+            সংগঠন/প্ল্যাটফর্ম থেকে পদত্যাগ করিব এবং তাহাদের সাথে আমার কোনো সাংগঠনিক সম্পৃক্ততা
+            থাকিবে না; এবং আমি এমন কোনো কাজ করিব না যা সংগঠনের গঠনতন্ত্রে উল্লিখিত নিয়মের
+            পরিপন্থী।
+        </p>
+        <p class="oath-text text-sm">
+            সংযুক্তি: জাতীয় পরিচয়পত্র / জন্ম নিবন্ধনের ফটোকপি (১ কপি), অধ্যয়নরত প্রতিষ্ঠানের
+            পরিচয়পত্র / ভর্তির সনদ (১ কপি)।
+        </p>
+        
+        <div class="signature-box">
+            <div class="signature-line"></div>
+            <div class="text-sm">স্বাক্ষর ও তারিখ</div>
+        </div>
+        
+        <!-- Committee Section -->
+        <h3 class="section-title mt-4">সংশ্লিষ্ট কমিটি কর্তৃক পূরণকৃত (এই অংশে কিছু লিখবেন না)</h3>
+        
+        <div class="field-row">
+            <span class="field-label">সংশ্লিষ্ট কমিটির সদস্যের নাম:</span>
+            <span class="field-value">{{committee_member_name}}</span>
+        </div>
+        
+        <div class="field-row">
+            <span class="field-label">পদবী:</span>
+            <span class="field-value">{{committee_member_position}}</span>
+        </div>
+        
+        <div class="field-row-lg">
+            <span class="field-label">মন্তব্য:</span>
+            <div class="field-value">{{committee_member_comments}}</div>
+        </div>
+        
+        <!-- Signature row -->
+        <div class="signature-row">
+            <div class="signature-col">
+                <div class="signature-line"></div>
+                <div class="mt-1">সংশ্লিষ্ট কমিটির সদস্যের স্বাক্ষর</div>
+            </div>
+            <div class="signature-col">
+                <div class="signature-line"></div>
+                <div class="mt-1">সাংগঠনিক/সহ সাংগঠনিক সম্পাদক</div>
+            </div>
+            <div class="signature-col">
+                <div class="signature-line"></div>
+                <div class="mt-1">সভাপতি / সাধারণ সম্পাদক</div>
+            </div>
+        </div>
+        
+        <div class="text-sm text-gray mt-3">
+            দরকারি কাগজপত্র সংযুক্ত করুন (জাতীয় পরিচয়পত্র/জন্ম নিবন্ধন/শিক্ষাপ্রতিষ্ঠানের পরিচয়পত্র ইত্যাদি)।
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>App Check</title>
+</head>
+<body>
+    <h1>Testing if server is working</h1>
+    <p>If you see this, the server is responding.</p>
+    <script>
+        console.log('HTML loaded successfully');
+        fetch('/api/health')
+            .then(r => r.json())
+            .then(d => {
+                console.log('API Response:', d);
+                document.body.innerHTML += '<p>API Status: ' + d.status + '</p>';
+            })
+            .catch(e => {
+                console.error('API Error:', e);
+                document.body.innerHTML += '<p style="color:red">API Error: ' + e.message + '</p>';
+            });
+    </script>
+</body>
+</html>

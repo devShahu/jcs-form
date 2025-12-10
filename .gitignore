@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Build output
+public/assets/
+public/index.html
+dist/
+
+# Storage
+storage/submissions/
+storage/photos/
+storage/temp/
+
+# Environment
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+temp/

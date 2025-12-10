@@ -1,0 +1,19 @@
+# Railway Nixpacks configuration
+[phases.setup]
+nixPkgs = ["php83", "php83Extensions.gd", "php83Extensions.mbstring", "php83Extensions.zip", "nodejs_20", "npm", "chromium"]
+
+[phases.install]
+cmds = [
+    "composer install --no-dev --optimize-autoloader",
+    "npm ci --only=production"
+]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "php -S 0.0.0.0:$PORT -t ."
+
+[variables]
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+PUPPETEER_EXECUTABLE_PATH = "/nix/store/chromium/bin/chromium"

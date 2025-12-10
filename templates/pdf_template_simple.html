@@ -1,0 +1,156 @@
+<style>
+body { font-family: freeserif; font-size: 11px; }
+h1 { font-size: 24px; font-weight: bold; color: #0f6b3f; text-align: center; margin: 5px 0; }
+h2 { font-size: 16px; font-weight: bold; color: #c9141f; text-align: center; margin: 3px 0; }
+h3 { font-size: 13px; font-weight: bold; margin: 10px 0 5px 0; }
+table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+th, td { border: 1px solid #999; padding: 5px; font-size: 10px; }
+th { background-color: #f0f0f0; font-weight: bold; }
+.field { margin: 5px 0; padding: 3px 0; border-bottom: 1px dotted #999; }
+.label { font-weight: bold; display: inline; }
+.value { display: inline; margin-left: 5px; }
+.motto { text-align: center; font-size: 10px; color: #666; margin: 5px 0; }
+</style>
+
+<div class="motto">শিক্ষা • ঐক্য • মুক্তি</div>
+
+<h1>{{org_name_bn}}</h1>
+<h2>সদস্য ফর্ম</h2>
+
+<div class="field">
+<span class="label">ফরম নং:</span>
+<span class="value">{{form_no}}</span>
+</div>
+
+<div class="field">
+<span class="label">নাম (বাংলায়):</span>
+<span class="value">{{name_bangla}}</span>
+</div>
+
+<div class="field">
+<span class="label">নাম (ইংরেজি বড় হাত):</span>
+<span class="value">{{name_english}}</span>
+</div>
+
+<div class="field">
+<span class="label">পিতার নাম:</span>
+<span class="value">{{father_name}}</span>
+</div>
+
+<div class="field">
+<span class="label">মাতার নাম:</span>
+<span class="value">{{mother_name}}</span>
+</div>
+
+<div class="field">
+<span class="label">মোবাইল নাম্বার:</span>
+<span class="value">{{mobile_number}}</span>
+</div>
+
+<div class="field">
+<span class="label">রক্তের গ্রুপ:</span>
+<span class="value">{{blood_group}}</span>
+</div>
+
+<div class="field">
+<span class="label">এনআইডি / জন্ম নিবন্ধন নাম্বার:</span>
+<span class="value">{{nid_birth_reg}}</span>
+</div>
+
+<div class="field">
+<span class="label">জন্ম তারিখ:</span>
+<span class="value">{{birth_date}}</span>
+</div>
+
+<div class="field">
+<span class="label">বর্তমান ঠিকানা:</span>
+<span class="value">{{present_address}}</span>
+</div>
+
+<div class="field">
+<span class="label">স্থায়ী ঠিকানা:</span>
+<span class="value">{{permanent_address}}</span>
+</div>
+
+<div class="field">
+<span class="label">রাজনৈতিক / সাংগঠনিক সম্পৃক্ততা:</span>
+<span class="value">{{political_affiliation}}</span>
+</div>
+
+<div class="field">
+<span class="label">সর্বশেষ পদবী:</span>
+<span class="value">{{last_position}}</span>
+</div>
+
+<h3>শিক্ষাগত যোগ্যতার বিবরণ:</h3>
+
+<table>
+<tr>
+<th>পরীক্ষা</th>
+<th>সাল</th>
+<th>বোর্ড</th>
+<th>বিভাগ/গ্রেড</th>
+<th>প্রতিষ্ঠান</th>
+</tr>
+<tr>
+<td>SSC/দাখিল</td>
+<td>{{ssc_year}}</td>
+<td>{{ssc_board}}</td>
+<td>{{ssc_group}}</td>
+<td>{{ssc_institution}}</td>
+</tr>
+<tr>
+<td>HSC/আলিম</td>
+<td>{{hsc_year}}</td>
+<td>{{hsc_board}}</td>
+<td>{{hsc_group}}</td>
+<td>{{hsc_institution}}</td>
+</tr>
+<tr>
+<td>স্নাতক</td>
+<td>{{graduation_year}}</td>
+<td>{{graduation_board}}</td>
+<td>{{graduation_subject}}</td>
+<td>{{graduation_institution}}</td>
+</tr>
+</table>
+
+<div class="field">
+<span class="label">জুলাই–আগস্ট ২০২৪ এ গণঅভ্যুত্থানে ভূমিকা:</span>
+<span class="value">{{movement_role}}</span>
+</div>
+
+<pagebreak />
+
+<h3>জাতীয় ছাত্রশক্তির জন্য আপনার চাওয়া এবং আকাঙ্ক্ষা:</h3>
+<div class="field">
+<span class="value">{{aspirations}}</span>
+</div>
+
+<h3>অঙ্গীকারনামা</h3>
+<p style="text-align: justify; line-height: 1.5;">
+আমি, <strong>{{declaration_name}}</strong> এই মর্মে অঙ্গীকার করিতেছি যে,
+এই ফরমে উল্লেখিত সকল তথ্য সঠিক এবং জুলাই–আগস্ট ২০২৪ এর গণঅভ্যুত্থানের মধ্য থেকে
+গড়ে উঠা ছাত্র সংগঠন, জাতীয় ছাত্রশক্তিতে যোগদানের মাধ্যমে জুলাই–আগস্ট ২০২৪-এর
+চেতনাকে সমুন্নত রাখিতে আমি আগ্রহী।
+</p>
+
+<p style="margin-top: 20px;">স্বাক্ষর: _____________________</p>
+<p>তারিখ: _____________________</p>
+
+<h3 style="margin-top: 20px;">সংশ্লিষ্ট কমিটি কর্তৃক পূরণকৃত</h3>
+
+<div class="field">
+<span class="label">কমিটির সদস্যের নাম:</span>
+<span class="value">{{committee_member_name}}</span>
+</div>
+
+<div class="field">
+<span class="label">পদবী:</span>
+<span class="value">{{committee_member_position}}</span>
+</div>
+
+<div class="field">
+<span class="label">মন্তব্য:</span>
+<span class="value">{{committee_member_comments}}</span>
+</div>
