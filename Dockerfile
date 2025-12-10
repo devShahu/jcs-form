@@ -38,7 +38,7 @@ RUN composer install --no-dev --optimize-autoloader
 
 # Copy package files for npm
 COPY package.json package-lock.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy rest of application
 COPY . .
