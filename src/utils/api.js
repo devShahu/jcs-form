@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// Use relative URL to go through Vite proxy in development
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -9,6 +10,7 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
   timeout: 120000, // 120 seconds (2 minutes) for PDF generation
+  withCredentials: true, // Send cookies with requests
 });
 
 // Request interceptor

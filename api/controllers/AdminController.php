@@ -14,18 +14,30 @@ class AdminController
     {
         $this->storage = new StorageManager();
         
-        // Configure session for cross-origin requests
-        if (session_status() === PHP_SESSION_NONE) {
-            ini_set('session.cookie_samesite', 'None');
-            ini_set('session.cookie_secure', 'false'); // Set to 'true' in production with HTTPS
-            ini_set('session.cookie_httponly', 'true');
-            ini_set('session.cookie_lifetime', '86400'); // 24 hours
-        }
+        // Start session if not already started
+        $this->initSession();
         
         // Load admin credentials from config
         $config = require __DIR__ . '/../../config/admin.php';
         $this->adminUsername = $config['username'] ?? 'admin';
         $this->adminPasswordHash = $config['password_hash'] ?? password_hash('admin123', PASSWORD_DEFAULT);
+    }
+
+    private function initSession(): void
+    {
+        // Session is already started in api/index.php
+        // This is kept for safety in case controller is used elsewhere
+        if (session_status() === PHP_SESSION_NONE) {
+            session_set_cookie_params([
+                'lifetime' => 86400,
+                'path' => '/',
+                'domain' => '',
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'Lax'
+            ]);
+            session_start();
+        }
     }
 
     public function login(array $request): array
@@ -48,12 +60,17 @@ class AdminController
             ];
         }
 
+        // Regenerate session ID for security
+        session_regenerate_id(true);
+        
         // Generate session token
-        session_start();
         $token = bin2hex(random_bytes(32));
         $_SESSION['admin_token'] = $token;
         $_SESSION['admin_username'] = $username;
         $_SESSION['admin_login_time'] = time();
+
+        error_log('Admin login successful for: ' . $username);
+        error_log('Session ID: ' . session_id());
 
         return [
             'success' => true,
@@ -64,7 +81,16 @@ class AdminController
 
     public function logout(): array
     {
-        session_start();
+        $_SESSION = [];
+        
+        if (ini_get("session.use_cookies")) {
+            $params = session_get_cookie_params();
+            setcookie(session_name(), '', time() - 42000,
+                $params["path"], $params["domain"],
+                $params["secure"], $params["httponly"]
+            );
+        }
+        
         session_destroy();
 
         return [
@@ -75,19 +101,23 @@ class AdminController
 
     public function verifyAuth(): bool
     {
-        session_start();
+        error_log('Verifying auth - Session ID: ' . session_id());
+        error_log('Session data: ' . json_encode($_SESSION));
         
         if (!isset($_SESSION['admin_token']) || !isset($_SESSION['admin_login_time'])) {
+            error_log('Auth failed: missing token or login time');
             return false;
         }
 
         // Check session timeout (24 hours)
         $sessionTimeout = 24 * 60 * 60;
         if (time() - $_SESSION['admin_login_time'] > $sessionTimeout) {
+            error_log('Auth failed: session timeout');
             session_destroy();
             return false;
         }
 
+        error_log('Auth successful');
         return true;
     }
 
