@@ -40,7 +40,17 @@ $app->options('/{routes:.+}', function (Request $request, Response $response) {
     return $response;
 });
 
-// Health check endpoint
+// Health check endpoint (root level for Railway)
+$app->get('/health', function (Request $request, Response $response) {
+    $response->getBody()->write(json_encode([
+        'status' => 'ok',
+        'message' => 'API is running',
+        'timestamp' => date('Y-m-d H:i:s')
+    ]));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+// Health check endpoint (API level)
 $app->get('/api/health', function (Request $request, Response $response) {
     $response->getBody()->write(json_encode([
         'status' => 'ok',

@@ -50,8 +50,8 @@ RUN npm run build
 RUN mkdir -p storage/submissions storage/photos storage/temp storage/uploads \
     && chmod -R 777 storage
 
-# Expose port
-EXPOSE 8000
+# Expose port (Railway will inject PORT env var)
+EXPOSE ${PORT:-8000}
 
-# Start PHP server
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "."]
+# Start PHP server with router script
+CMD php -S 0.0.0.0:${PORT:-8000} router.php
