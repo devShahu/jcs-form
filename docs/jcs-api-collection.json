@@ -1,0 +1,202 @@
+{
+  "info": {
+    "_postman_id": "jcs-api-collection-v1",
+    "name": "JCS Membership Form API",
+    "description": "Complete API collection for JCS Membership Form System - জাতীয় ছাত্রশক্তি সদস্য ফরম",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" },
+    { "key": "submissionId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Public Endpoints",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        },
+        {
+          "name": "Get Form Config",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/config"
+          }
+        },
+        {
+          "name": "Get Public Settings",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/settings"
+          }
+        },
+        {
+          "name": "Validate Form",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"step\": \"personal\",\n  \"data\": {\n    \"name_bangla\": \"আব্দুল করিম\",\n    \"name_english\": \"ABDUL KARIM\",\n    \"mobile_number\": \"01712345678\"\n  }\n}"
+            },
+            "url": "{{baseUrl}}/api/validate"
+          }
+        },
+        {
+          "name": "Upload Photo",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "photo", "type": "file", "src": "" }]
+            },
+            "url": "{{baseUrl}}/api/upload-photo"
+          }
+        },
+        {
+          "name": "Submit Form",
+          "event": [{
+            "listen": "test",
+            "script": {
+              "exec": ["var jsonData = pm.response.json();", "if (jsonData.submission_id) { pm.collectionVariables.set('submissionId', jsonData.submission_id); }"],
+              "type": "text/javascript"
+            }
+          }],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name_bangla\": \"আব্দুল করিম\",\n  \"name_english\": \"ABDUL KARIM\",\n  \"father_name\": \"মোহাম্মদ আলী\",\n  \"mother_name\": \"ফাতেমা বেগম\",\n  \"mobile_number\": \"01712345678\",\n  \"blood_group\": \"A+\",\n  \"nid_birth_reg\": \"1234567890123\",\n  \"birth_date\": \"01-01-2000\",\n  \"present_address\": \"ঢাকা\",\n  \"permanent_address\": \"চট্টগ্রাম\",\n  \"political_affiliation\": \"নেই\",\n  \"ssc_year\": \"2015\",\n  \"ssc_board\": \"ঢাকা\",\n  \"ssc_group\": \"বিজ্ঞান\",\n  \"ssc_institution\": \"স্কুল\",\n  \"movement_role\": \"অংশগ্রহণ\",\n  \"aspirations\": \"কাজ করতে চাই\",\n  \"declaration_name\": \"আব্দুল করিম\"\n}"
+            },
+            "url": "{{baseUrl}}/api/submit"
+          }
+        },
+        {
+          "name": "Download PDF",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/download/{{submissionId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin Endpoints",
+      "item": [
+        {
+          "name": "Admin Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/login"
+          }
+        },
+        {
+          "name": "Admin Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/admin/logout"
+          }
+        },
+        {
+          "name": "List Submissions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/submissions?page=1&limit=20",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "submissions"],
+              "query": [
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "20" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Submission",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/submissions/{{submissionId}}"
+          }
+        },
+        {
+          "name": "Download Submission PDF",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/submissions/{{submissionId}}/pdf"
+          }
+        },
+        {
+          "name": "Search Submissions",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/search?query=আব্দুল&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "search"],
+              "query": [
+                { "key": "query", "value": "আব্দুল" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Settings",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/settings"
+          }
+        },
+        {
+          "name": "Update Settings",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"org_name_bn\": \"জাতীয় ছাত্রশক্তি\",\n  \"org_name_en\": \"Jatiya Chatra Shakti\"\n}"
+            },
+            "url": "{{baseUrl}}/api/admin/settings"
+          }
+        },
+        {
+          "name": "Upload Logo",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "logo", "type": "file", "src": "" }]
+            },
+            "url": "{{baseUrl}}/api/admin/upload-logo"
+          }
+        },
+        {
+          "name": "Test HTML",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/test-html"
+          }
+        },
+        {
+          "name": "Test PDF",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/admin/test-pdf"
+          }
+        }
+      ]
+    }
+  ]
+}

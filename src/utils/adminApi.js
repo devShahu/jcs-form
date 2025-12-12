@@ -14,6 +14,18 @@ const adminApi = axios.create({
   timeout: 120000, // 120 seconds for PDF generation
 });
 
+// Request interceptor to add auth token header
+adminApi.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      config.headers['X-Admin-Token'] = token;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Response interceptor
 adminApi.interceptors.response.use(
   (response) => {

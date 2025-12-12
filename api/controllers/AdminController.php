@@ -44,6 +44,8 @@ class AdminController
     {
         $username = $request['username'] ?? '';
         $password = $request['password'] ?? '';
+        
+        error_log("Login attempt for user: $username");
 
         // Validate credentials
         if ($username !== $this->adminUsername) {
@@ -68,9 +70,21 @@ class AdminController
         $_SESSION['admin_token'] = $token;
         $_SESSION['admin_username'] = $username;
         $_SESSION['admin_login_time'] = time();
-
-        error_log('Admin login successful for: ' . $username);
-        error_log('Session ID: ' . session_id());
+        
+        // Also save token to file (fallback for when cookies don't work)
+        $tokenFile = __DIR__ . '/../../storage/admin_tokens.json';
+        $tokens = [];
+        if (file_exists($tokenFile)) {
+            $tokens = json_decode(file_get_contents($tokenFile), true) ?: [];
+        }
+        // Clean old tokens
+        $tokens = array_filter($tokens, fn($t) => time() - $t['created_at'] < 86400);
+        // Add new token
+        $tokens[$token] = [
+            'username' => $username,
+            'created_at' => time()
+        ];
+        file_put_contents($tokenFile, json_encode($tokens));
 
         return [
             'success' => true,
@@ -101,24 +115,38 @@ class AdminController
 
     public function verifyAuth(): bool
     {
-        error_log('Verifying auth - Session ID: ' . session_id());
-        error_log('Session data: ' . json_encode($_SESSION));
+        // First try session-based auth
+        if (isset($_SESSION['admin_token']) && isset($_SESSION['admin_login_time'])) {
+            // Check session timeout (24 hours)
+            $sessionTimeout = 24 * 60 * 60;
+            if (time() - $_SESSION['admin_login_time'] > $sessionTimeout) {
+                session_destroy();
+                return false;
+            }
+            return true;
+        }
         
-        if (!isset($_SESSION['admin_token']) || !isset($_SESSION['admin_login_time'])) {
-            error_log('Auth failed: missing token or login time');
-            return false;
+        // Fallback: Check for token in header (for when cookies don't work)
+        $headerToken = $_SERVER['HTTP_X_ADMIN_TOKEN'] ?? null;
+        if ($headerToken) {
+            // Verify token from file-based storage
+            $tokenFile = __DIR__ . '/../../storage/admin_tokens.json';
+            if (file_exists($tokenFile)) {
+                $tokens = json_decode(file_get_contents($tokenFile), true) ?: [];
+                if (isset($tokens[$headerToken])) {
+                    $tokenData = $tokens[$headerToken];
+                    // Check token timeout (24 hours)
+                    if (time() - $tokenData['created_at'] < 86400) {
+                        return true;
+                    }
+                    // Token expired, remove it
+                    unset($tokens[$headerToken]);
+                    file_put_contents($tokenFile, json_encode($tokens));
+                }
+            }
         }
-
-        // Check session timeout (24 hours)
-        $sessionTimeout = 24 * 60 * 60;
-        if (time() - $_SESSION['admin_login_time'] > $sessionTimeout) {
-            error_log('Auth failed: session timeout');
-            session_destroy();
-            return false;
-        }
-
-        error_log('Auth successful');
-        return true;
+        
+        return false;
     }
 
     public function listSubmissions(array $params): array

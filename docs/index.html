@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JCS Membership Form API Documentation</title>
+    <meta name="description" content="Complete API documentation for JCS Membership Form System - জাতীয় ছাত্রশক্তি সদস্য ফরম">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd', 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8', 800: '#1e40af', 900: '#1e3a8a' },
+                        dark: { 800: '#1e293b', 900: '#0f172a' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .method-get { background: #22c55e; }
+        .method-post { background: #3b82f6; }
+        .method-put { background: #f59e0b; }
+        .method-delete { background: #ef4444; }
+        .endpoint-card:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .sidebar-link.active { background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); color: white; }
+        .copy-btn:hover { background: #3b82f6; color: white; }
+        pre[class*="language-"] { margin: 0; border-radius: 0.5rem; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark-800/80 backdrop-blur-lg border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-code text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold">JCS API</h1>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">v1.0.0</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <a href="jcs-api-collection.json" download class="hidden sm:flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+                        <i class="fas fa-download"></i> Postman Collection
+                    </a>
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden lg:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-16 left-0 w-72 h-[calc(100vh-4rem)] bg-white dark:bg-dark-800 border-r border-gray-200 dark:border-gray-700 overflow-y-auto z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+        <div class="p-4">
+            <!-- Search -->
+            <div class="relative mb-6">
+                <input type="text" id="search-input" placeholder="Search endpoints..." class="w-full pl-10 pr-4 py-2 bg-gray-100 dark:bg-dark-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all">
+                <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="space-y-1">
+                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Getting Started</p>
+                <a href="#introduction" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-home w-5"></i> Introduction
+                </a>
+                <a href="#authentication" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-key w-5"></i> Authentication
+                </a>
+                <a href="#errors" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-exclamation-triangle w-5"></i> Error Handling
+                </a>
+
+                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 mt-6">Public Endpoints</p>
+                <a href="#health" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> Health Check
+                </a>
+                <a href="#config" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> Form Config
+                </a>
+                <a href="#settings" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> Public Settings
+                </a>
+                <a href="#validate" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-blue-600">POST</span> Validate Form
+                </a>
+                <a href="#upload-photo" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-blue-600">POST</span> Upload Photo
+                </a>
+                <a href="#submit" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-blue-600">POST</span> Submit Form
+                </a>
+                <a href="#download" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> Download PDF
+                </a>
+
+                <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2 mt-6">Admin Endpoints</p>
+                <a href="#admin-login" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-blue-600">POST</span> Login
+                </a>
+                <a href="#admin-logout" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-blue-600">POST</span> Logout
+                </a>
+                <a href="#admin-submissions" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> List Submissions
+                </a>
+                <a href="#admin-submission" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> Get Submission
+                </a>
+                <a href="#admin-search" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> Search
+                </a>
+                <a href="#admin-settings" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-green-600">GET</span> Get Settings
+                </a>
+                <a href="#admin-update-settings" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-blue-600">POST</span> Update Settings
+                </a>
+                <a href="#admin-upload-logo" class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="w-12 text-xs font-bold text-blue-600">POST</span> Upload Logo
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-72 pt-16 min-h-screen">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            
+            <!-- Introduction Section -->
+            <section id="introduction" class="mb-16 fade-in">
+                <div class="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl p-8 text-white mb-8">
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-4">JCS Membership Form API</h1>
+                    <p class="text-lg text-primary-100 mb-6">জাতীয় ছাত্রশক্তি সদস্য ফরম - Complete REST API for membership form management with PDF generation and admin dashboard.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2 bg-white/20 rounded-lg px-4 py-2">
+                            <i class="fas fa-server"></i>
+                            <span>Base URL: <code class="font-mono">/api</code></span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white/20 rounded-lg px-4 py-2">
+                            <i class="fas fa-code"></i>
+                            <span>Format: JSON</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white/20 rounded-lg px-4 py-2">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Auth: Session Cookies</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-dark-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-file-pdf text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">PDF Generation</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Generate beautiful PDFs with Bengali font support using Puppeteer/Browsershot.</p>
+                    </div>
+                    <div class="bg-white dark:bg-dark-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-user-shield text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Admin Dashboard</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Secure admin panel to manage submissions, settings, and generate reports.</p>
+                    </div>
+                    <div class="bg-white dark:bg-dark-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fas fa-check-circle text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-semibold mb-2">Form Validation</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Comprehensive server-side validation with detailed error messages.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Authentication Section -->
+            <section id="authentication" class="mb-16 fade-in">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <i class="fas fa-key text-primary-500"></i> Authentication
+                </h2>
+                <div class="bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="p-6">
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">The API uses session-based authentication for admin endpoints. After successful login, a session cookie is set that must be included in subsequent requests.</p>
+                        
+                        <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4 mb-6">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-exclamation-circle text-amber-600 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-amber-800 dark:text-amber-200">Important</h4>
+                                    <p class="text-sm text-amber-700 dark:text-amber-300">All admin endpoints require authentication. Include <code class="bg-amber-100 dark:bg-amber-900 px-1 rounded">withCredentials: true</code> in your requests to send cookies.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4 class="font-semibold mb-3">Default Credentials (Development)</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4 font-mono text-sm">
+                            <p><span class="text-gray-500">Username:</span> <span class="text-green-600">admin</span></p>
+                            <p><span class="text-gray-500">Password:</span> <span class="text-green-600">admin123</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Handling Section -->
+            <section id="errors" class="mb-16 fade-in">
+                <h2 class="text-2xl font-bold mb-6 flex items-center gap-3">
+                    <i class="fas fa-exclamation-triangle text-primary-500"></i> Error Handling
+                </h2>
+                <div class="bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="p-6">
+                        <p class="text-gray-600 dark:text-gray-400 mb-6">All API responses follow a consistent format. Errors include a <code>success: false</code> flag and a descriptive message.</p>
+                        
+                        <h4 class="font-semibold mb-3">HTTP Status Codes</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-dark-900 rounded-lg">
+                                <span class="w-16 text-center font-mono font-bold text-green-600">200</span>
+                                <span>Success - Request completed successfully</span>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-dark-900 rounded-lg">
+                                <span class="w-16 text-center font-mono font-bold text-yellow-600">400</span>
+                                <span>Bad Request - Invalid input or validation error</span>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-dark-900 rounded-lg">
+                                <span class="w-16 text-center font-mono font-bold text-red-600">401</span>
+                                <span>Unauthorized - Authentication required or invalid</span>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-dark-900 rounded-lg">
+                                <span class="w-16 text-center font-mono font-bold text-red-600">404</span>
+                                <span>Not Found - Resource doesn't exist</span>
+                            </div>
+                            <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-dark-900 rounded-lg">
+                                <span class="w-16 text-center font-mono font-bold text-red-600">500</span>
+                                <span>Server Error - Internal server error</span>
+                            </div>
+                        </div>
+
+                        <h4 class="font-semibold mb-3 mt-6">Error Response Format</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": false,
+  "message": "Error description here",
+  "errors": {
+    "field_name": "Specific field error"
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Health Check Endpoint -->
+            <section id="health" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/health</code>
+                        <span class="ml-auto text-sm text-gray-500">Public</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Health Check</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Check if the API server is running and healthy. Used by deployment platforms for health monitoring.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "status": "ok",
+  "message": "API is running",
+  "timestamp": "2024-12-12 10:30:00"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Form Config Endpoint -->
+            <section id="config" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/api/config</code>
+                        <span class="ml-auto text-sm text-gray-500">Public</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Get Form Configuration</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Retrieve the form field configuration including labels, validation rules, and field types.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "fields": {
+    "personal": [...],
+    "education": [...],
+    "declaration": [...]
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Public Settings Endpoint -->
+            <section id="settings" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/api/settings</code>
+                        <span class="ml-auto text-sm text-gray-500">Public</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Get Public Settings</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Retrieve public application settings like organization name and logo path.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "data": {
+    "org_name_bn": "জাতীয় ছাত্রশক্তি",
+    "org_name_en": "Jatiya Chatra Shakti",
+    "logo_path": "/images/logo.png"
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Validate Form Endpoint -->
+            <section id="validate" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-post px-3 py-1 rounded-md text-white text-sm font-bold">POST</span>
+                        <code class="font-mono text-lg">/api/validate</code>
+                        <span class="ml-auto text-sm text-gray-500">Public</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Validate Form Data</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Validate form data for a specific step or the entire form. Returns validation errors if any.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Request Body</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "step": "personal",
+  "data": {
+    "name_bangla": "আব্দুল করিম",
+    "name_english": "ABDUL KARIM",
+    "father_name": "মোহাম্মদ আলী",
+    "mother_name": "ফাতেমা বেগম",
+    "mobile_number": "01712345678",
+    "blood_group": "A+",
+    "nid_birth_reg": "1234567890123",
+    "birth_date": "01-01-2000"
+  }
+}</code></pre>
+
+                        <h4 class="font-semibold mb-2 mt-6">Success Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "errors": {},
+  "data": { /* sanitized data */ }
+}</code></pre>
+
+                        <h4 class="font-semibold mb-2 mt-6">Error Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": false,
+  "errors": {
+    "mobile_number": "Invalid mobile number format",
+    "birth_date": "Birth date is required"
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upload Photo Endpoint -->
+            <section id="upload-photo" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-post px-3 py-1 rounded-md text-white text-sm font-bold">POST</span>
+                        <code class="font-mono text-lg">/api/upload-photo</code>
+                        <span class="ml-auto text-sm text-gray-500">Public</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Upload Photo</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Upload a passport-size photo for the membership form. Accepts JPEG, PNG formats.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Request</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4 mb-4">
+                            <p class="text-sm"><strong>Content-Type:</strong> <code>multipart/form-data</code></p>
+                            <p class="text-sm mt-2"><strong>Form Field:</strong> <code>photo</code> (file)</p>
+                        </div>
+
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "photo_path": "storage/photos/abc123.jpg",
+  "photo_url": "/storage/photos/abc123.jpg"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Submit Form Endpoint -->
+            <section id="submit" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-post px-3 py-1 rounded-md text-white text-sm font-bold">POST</span>
+                        <code class="font-mono text-lg">/api/submit</code>
+                        <span class="ml-auto text-sm text-gray-500">Public</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Submit Membership Form</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Submit the complete membership form. Generates a PDF with Bengali font support and stores the submission.</p>
+                        
+                        <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                            <div class="flex items-start gap-3">
+                                <i class="fas fa-info-circle text-blue-600 mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold text-blue-800 dark:text-blue-200">Note</h4>
+                                    <p class="text-sm text-blue-700 dark:text-blue-300">PDF generation may take up to 30 seconds. The API timeout is set to 120 seconds.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4 class="font-semibold mb-2 mt-6">Request Body</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "name_bangla": "আব্দুল করিম",
+  "name_english": "ABDUL KARIM",
+  "father_name": "মোহাম্মদ আলী",
+  "mother_name": "ফাতেমা বেগম",
+  "mobile_number": "01712345678",
+  "blood_group": "A+",
+  "nid_birth_reg": "1234567890123",
+  "birth_date": "01-01-2000",
+  "present_address": "ঢাকা, বাংলাদেশ",
+  "permanent_address": "চট্টগ্রাম, বাংলাদেশ",
+  "political_affiliation": "কোনো রাজনৈতিক সংগঠনের সাথে জড়িত নই",
+  "ssc_year": "2015",
+  "ssc_board": "ঢাকা",
+  "ssc_group": "বিজ্ঞান",
+  "ssc_institution": "ঢাকা কলেজিয়েট স্কুল",
+  "hsc_year": "2017",
+  "hsc_board": "ঢাকা",
+  "hsc_group": "বিজ্ঞান",
+  "hsc_institution": "নটরডেম কলেজ",
+  "movement_role": "জুলাই-আগস্ট ২০২৪ এর গণঅভ্যুত্থানে অংশগ্রহণ",
+  "aspirations": "ছাত্রদের অধিকার রক্ষায় কাজ করতে চাই",
+  "declaration_name": "আব্দুল করিম",
+  "photo_path": "storage/photos/abc123.jpg"
+}</code></pre>
+
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "submission_id": "sub_abc123xyz",
+  "message": "Form submitted successfully"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Download PDF Endpoint -->
+            <section id="download" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/api/download/{id}</code>
+                        <span class="ml-auto text-sm text-gray-500">Public</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Download PDF</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Download the generated PDF for a submission by its ID.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Path Parameters</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4">
+                            <table class="w-full text-sm">
+                                <tr>
+                                    <td class="font-mono font-semibold py-2">id</td>
+                                    <td class="text-gray-600 dark:text-gray-400">string</td>
+                                    <td>The submission ID returned from form submission</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4">
+                            <p class="text-sm"><strong>Content-Type:</strong> <code>application/pdf</code></p>
+                            <p class="text-sm mt-2"><strong>Content-Disposition:</strong> <code>attachment; filename="jcs_membership_{id}.pdf"</code></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Login Endpoint -->
+            <section id="admin-login" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-post px-3 py-1 rounded-md text-white text-sm font-bold">POST</span>
+                        <code class="font-mono text-lg">/api/admin/login</code>
+                        <span class="ml-auto px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs rounded">Admin</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Admin Login</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Authenticate as an admin user. Returns a session token and sets a session cookie.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Request Body</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "username": "admin",
+  "password": "admin123"
+}</code></pre>
+
+                        <h4 class="font-semibold mb-2 mt-6">Success Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "token": "abc123...",
+  "username": "admin"
+}</code></pre>
+
+                        <h4 class="font-semibold mb-2 mt-6">Error Response (401)</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": false,
+  "message": "Invalid credentials"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Logout Endpoint -->
+            <section id="admin-logout" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-post px-3 py-1 rounded-md text-white text-sm font-bold">POST</span>
+                        <code class="font-mono text-lg">/api/admin/logout</code>
+                        <span class="ml-auto px-2 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 text-xs rounded">Admin</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Admin Logout</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">End the admin session and clear the session cookie.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "message": "Logged out successfully"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin List Submissions Endpoint -->
+            <section id="admin-submissions" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/api/admin/submissions</code>
+                        <span class="ml-auto px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded"><i class="fas fa-lock mr-1"></i>Auth Required</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">List All Submissions</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Retrieve a paginated list of all form submissions.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Query Parameters</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4">
+                            <table class="w-full text-sm">
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="font-mono font-semibold py-2">page</td>
+                                    <td class="text-gray-600 dark:text-gray-400">integer</td>
+                                    <td>Page number (default: 1)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono font-semibold py-2">limit</td>
+                                    <td class="text-gray-600 dark:text-gray-400">integer</td>
+                                    <td>Items per page (default: 20)</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "data": [
+    {
+      "id": "sub_abc123",
+      "name_bangla": "আব্দুল করিম",
+      "name_english": "ABDUL KARIM",
+      "mobile_number": "01712345678",
+      "submitted_at": "2024-12-12 10:30:00"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 20,
+    "total": 150,
+    "pages": 8
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Get Submission Endpoint -->
+            <section id="admin-submission" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/api/admin/submissions/{id}</code>
+                        <span class="ml-auto px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded"><i class="fas fa-lock mr-1"></i>Auth Required</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Get Single Submission</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Retrieve complete details of a specific submission by ID.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Path Parameters</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4">
+                            <table class="w-full text-sm">
+                                <tr>
+                                    <td class="font-mono font-semibold py-2">id</td>
+                                    <td class="text-gray-600 dark:text-gray-400">string</td>
+                                    <td>The submission ID</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "data": {
+    "id": "sub_abc123",
+    "name_bangla": "আব্দুল করিম",
+    "name_english": "ABDUL KARIM",
+    "father_name": "মোহাম্মদ আলী",
+    "mother_name": "ফাতেমা বেগম",
+    "mobile_number": "01712345678",
+    "blood_group": "A+",
+    "birth_date": "01-01-2000",
+    "present_address": "ঢাকা, বাংলাদেশ",
+    "permanent_address": "চট্টগ্রাম, বাংলাদেশ",
+    "submitted_at": "2024-12-12 10:30:00",
+    "pdf_path": "storage/submissions/sub_abc123.pdf"
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Search Endpoint -->
+            <section id="admin-search" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/api/admin/search</code>
+                        <span class="ml-auto px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded"><i class="fas fa-lock mr-1"></i>Auth Required</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Search Submissions</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Search submissions by name, mobile number, or other fields with optional date filtering.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Query Parameters</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4">
+                            <table class="w-full text-sm">
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="font-mono font-semibold py-2">query</td>
+                                    <td class="text-gray-600 dark:text-gray-400">string</td>
+                                    <td>Search term (name, mobile, etc.)</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="font-mono font-semibold py-2">date_from</td>
+                                    <td class="text-gray-600 dark:text-gray-400">string</td>
+                                    <td>Start date (YYYY-MM-DD)</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="font-mono font-semibold py-2">date_to</td>
+                                    <td class="text-gray-600 dark:text-gray-400">string</td>
+                                    <td>End date (YYYY-MM-DD)</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 dark:border-gray-700">
+                                    <td class="font-mono font-semibold py-2">page</td>
+                                    <td class="text-gray-600 dark:text-gray-400">integer</td>
+                                    <td>Page number (default: 1)</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-mono font-semibold py-2">limit</td>
+                                    <td class="text-gray-600 dark:text-gray-400">integer</td>
+                                    <td>Items per page (default: 20)</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <h4 class="font-semibold mb-2 mt-6">Example Request</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-bash text-sm">GET /api/admin/search?query=আব্দুল&date_from=2024-01-01&page=1&limit=10</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Get Settings Endpoint -->
+            <section id="admin-settings" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-get px-3 py-1 rounded-md text-white text-sm font-bold">GET</span>
+                        <code class="font-mono text-lg">/api/admin/settings</code>
+                        <span class="ml-auto px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded"><i class="fas fa-lock mr-1"></i>Auth Required</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Get Admin Settings</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Retrieve all application settings including organization details and configuration.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "data": {
+    "org_name_bn": "জাতীয় ছাত্রশক্তি",
+    "org_name_en": "Jatiya Chatra Shakti",
+    "logo_path": "/images/logo.png",
+    "contact_email": "info@jcs.org",
+    "contact_phone": "+880-1234567890"
+  }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Update Settings Endpoint -->
+            <section id="admin-update-settings" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-post px-3 py-1 rounded-md text-white text-sm font-bold">POST</span>
+                        <code class="font-mono text-lg">/api/admin/settings</code>
+                        <span class="ml-auto px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded"><i class="fas fa-lock mr-1"></i>Auth Required</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Update Settings</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Update application settings. Only provided fields will be updated.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Request Body</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "org_name_bn": "জাতীয় ছাত্রশক্তি",
+  "org_name_en": "Jatiya Chatra Shakti",
+  "contact_email": "contact@jcs.org"
+}</code></pre>
+
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "message": "Settings updated successfully",
+  "data": { /* updated settings */ }
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Admin Upload Logo Endpoint -->
+            <section id="admin-upload-logo" class="mb-12 fade-in">
+                <div class="endpoint-card bg-white dark:bg-dark-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
+                    <div class="flex items-center gap-4 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <span class="method-post px-3 py-1 rounded-md text-white text-sm font-bold">POST</span>
+                        <code class="font-mono text-lg">/api/admin/upload-logo</code>
+                        <span class="ml-auto px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs rounded"><i class="fas fa-lock mr-1"></i>Auth Required</span>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Upload Organization Logo</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-4">Upload a new organization logo. Accepts PNG, JPEG, SVG formats. The logo will be used in PDF generation.</p>
+                        
+                        <h4 class="font-semibold mb-2 mt-6">Request</h4>
+                        <div class="bg-gray-100 dark:bg-dark-900 rounded-lg p-4 mb-4">
+                            <p class="text-sm"><strong>Content-Type:</strong> <code>multipart/form-data</code></p>
+                            <p class="text-sm mt-2"><strong>Form Field:</strong> <code>logo</code> (file)</p>
+                            <p class="text-sm mt-2"><strong>Max Size:</strong> 2MB</p>
+                        </div>
+
+                        <h4 class="font-semibold mb-2 mt-6">Response</h4>
+                        <pre class="bg-gray-900 rounded-lg p-4 overflow-x-auto"><code class="language-json text-sm">{
+  "success": true,
+  "message": "Logo uploaded successfully",
+  "logo_path": "/storage/uploads/logo_abc123.png"
+}</code></pre>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div class="text-center sm:text-left">
+                        <p class="text-gray-600 dark:text-gray-400">JCS Membership Form API Documentation</p>
+                        <p class="text-sm text-gray-500">জাতীয় ছাত্রশক্তি সদস্য ফরম</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <a href="jcs-api-collection.json" download class="flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+                            <i class="fas fa-download"></i> Download Postman Collection
+                        </a>
+                    </div>
+                </div>
+                <p class="text-center text-sm text-gray-500 mt-8">© 2024 JCS. All rights reserved.</p>
+            </footer>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

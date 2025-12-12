@@ -12,7 +12,7 @@ const Header = () => {
 
   const loadSettings = async () => {
     try {
-      const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+      const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
       const response = await axios.get(`${API_BASE_URL}/settings`);
       if (response.data.success) {
         setOrgName(response.data.data.org_name_bn || 'জাতীয় ছাত্রশক্তি');
